@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
-        title: 'Namer App',
+        title: 'Anxiety Predictor',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         ),
@@ -26,16 +26,34 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
+
+  void getAnxietyLevel() {
+    current = WordPair.random();
+    notifyListeners();
+  }
 }
 
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
+    var pair = appState.current;
 
     return Scaffold(
+      appBar: AppBar(title: Text('Anxiety Predictor')),
       body: Column(
-        children: [Text('A random idea:'), Text(appState.current.asLowerCase)],
+        children: [
+          Text('Anxiety:'),
+          Text(pair.asLowerCase),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                appState.getAnxietyLevel();
+              },
+              child: Text('Check Anxiety level'),
+            ),
+          ),
+        ],
       ),
     );
   }
