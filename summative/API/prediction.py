@@ -54,7 +54,7 @@ def predict_anxiety(data: AnxietyInput):
     return {"predicted_anxiety_level": prediction}
 
 # Health check endpoint
-@app.get("/")
+@app.get("/predict")
 def read_root():
     """Health check endpoint."""
     return {"message": "Anxiety Prediction API is running."}
