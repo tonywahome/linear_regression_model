@@ -1,8 +1,8 @@
 // main.dart
-
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'screens/prediction_screen.dart';
 
 void main() {
   runApp(const AnxietyPredictorApp());
@@ -52,9 +52,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
         _predictionResult = '';
       });
 
-      final url = Uri.parse(
-        'https://anxiety-prediction-api.onrender.com/predict',
-      );
+      final url = Uri.https('anxiety-prediction-api.onrender.com', '/predict');
 
       final Map<String, double> data = {
         "Depression": double.tryParse(_depressionController.text) ?? 0.0,
