@@ -2,6 +2,6 @@ services:
   - name: mental_health_data_cleaning
     root_dir: linear_regression_model
     runtime: python
-    buildcommands:
+    buildCommands: # Corrected spelling from 'buildcommands'
       - pip install -r requirements.txt
-    startCommand: uvicorn API.prediction:app --port 10000
+    startCommand: uvicorn API.prediction:app --host 0.0.0.0 --port 10000
