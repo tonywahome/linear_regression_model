@@ -37,9 +37,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
         _predictionResult = '';
       });
 
-      final url = Uri.parse(
-        'https://anxiety-prediction-api.onrender.com/predict',
-      );
+      final url = Uri.parse('http://127.0.0.1:8000/predict');
 
       final Map<String, double> data = {
         "Depression": double.tryParse(_depressionController.text) ?? 0.0,

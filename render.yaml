@@ -1,0 +1,7 @@
+services:
+  - name: mental_health_data_cleaning
+    root_dir: linear_regression_model
+    runtime: python
+    buildcommands:
+      - pip install -r requirements.txt
+    startCommand: uvicorn API.prediction:app --host 0.0.0.0 --port 8000
