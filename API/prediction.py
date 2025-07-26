@@ -10,14 +10,24 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 # --- 1. Load Models and Scalers at Startup ---
-try:
-    model = joblib.load("C:\\Users\\LENOVO\\Cloned repos\\lrm_summative\\linear_regression_model\\linear_regression\\anxiety_model.pkl")
-    scaler = joblib.load("C:\\Users\\LENOVO\\Cloned repos\\lrm_summative\\linear_regression_model\\linear_regression\\feature_scaler.pkl")
-    print("Model and scaler loaded successfully.")
-except Exception as e:
-    print(f"ERROR: A model or scaler file could not be loaded. {e}")
-    model = None
-    scaler = None
+
+def load_models():
+    try:
+
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        # Load the pre-trained model and scaler from the specified paths
+
+        model_path = os.path.join(current_dir, '..', "linear_regression", 'anxiety_model.pkl')
+        scaler_path = os.path.join(current_dir, '..', "linear_regression", "feature_scaler.pkl")
+        model = joblib.load(model_path)
+        scaler = joblib.load(scaler_path)
+        print("Model and scaler loaded successfully.")
+        return model, scaler
+    
+    except Exception as e:
+        raise RuntimeError(f"ERROR: A model or scaler file could not be loaded. {e}")
+    
+model, scaler = load_models()
 
 # --- 2. Initialize FastAPI App ---
 app = FastAPI(
