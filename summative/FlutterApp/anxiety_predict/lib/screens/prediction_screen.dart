@@ -28,7 +28,6 @@ class _PredictionScreenState extends State<PredictionScreen> {
 
   // Function to call the API and get the prediction
   Future<void> _predictAnxiety() async {
-    // Hide keyboard when the button is pressed
     FocusScope.of(context).unfocus();
 
     if (_formKey.currentState!.validate()) {
@@ -37,7 +36,9 @@ class _PredictionScreenState extends State<PredictionScreen> {
         _predictionResult = '';
       });
 
-      final url = Uri.parse('http://127.0.0.1:8000/predict');
+      final url = Uri.parse(
+        'https://linear-regression-model-yd0p.onrender.com/predict',
+      );
 
       final Map<String, double> data = {
         "Depression": double.tryParse(_depressionController.text) ?? 0.0,
@@ -50,18 +51,29 @@ class _PredictionScreenState extends State<PredictionScreen> {
       };
 
       try {
-        final response = await http.post(
-          url,
-          headers: {"Content-Type": "application/json"},
-          body: json.encode(data),
-        );
+        final response = await http
+            .post(
+              url,
+              headers: {"Content-Type": "application/json"},
+              body: json.encode(data),
+            )
+            .timeout(const Duration(seconds: 30));
+
+        print("Status Code: ${response.statusCode}");
+        print("Response Body: ${response.body}");
 
         if (response.statusCode == 200) {
           final result = json.decode(response.body);
-          setState(() {
-            _predictionResult =
-                "Predicted Anxiety Prevalence: ${result['predicted_anxiety_prevalence'].toStringAsFixed(4)}%";
-          });
+          if (result.containsKey('predicted_anxiety_level')) {
+            setState(() {
+              _predictionResult =
+                  "Predicted Anxiety Level: ${double.parse(result['predicted_anxiety_level'].toString()).toStringAsFixed(4)}%";
+            });
+          } else {
+            setState(() {
+              _predictionResult = "Error: Invalid response format.";
+            });
+          }
         } else {
           setState(() {
             _predictionResult =
@@ -69,6 +81,7 @@ class _PredictionScreenState extends State<PredictionScreen> {
           });
         }
       } catch (e) {
+        print("Exception: $e");
         setState(() {
           _predictionResult = "Error: Could not connect to the API server.";
         });
