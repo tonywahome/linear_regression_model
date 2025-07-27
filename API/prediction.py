@@ -76,7 +76,6 @@ def predict_anxiety(data: AnxietyInput):
         # Convert the incoming Pydantic data into a pandas DataFrame
         input_df = pd.DataFrame([data.dict()])
 
-        # -- START OF THE FIX --
         # Create a mapping from the API's variable names to the model's training column names
         column_mapping = {
             "Schizophrenia": "Schizophrenia (%)",
